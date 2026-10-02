@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anola Place – Building Issue Map</title>
+  <link rel="stylesheet" href="app/app.css?v=0.3">
+</head>
+<body>
+  <header id="topbar">
+    <div class="brand">
+      <div class="title">ANOLA PLACE <span>Building Issue Map</span></div>
+      <div class="sub">2041 Bellwood Ave, Burnaby · Strata Plan NW2020 · unofficial prototype v0.3</div>
+    </div>
+    <div class="tools">
+      <button id="tourBtn" class="btn tour" title="A short guided tour of the building">▶ Tour</button>
+      <button id="homeBtn" class="btn icon" title="Back to overview">⌂</button>
+      <nav id="views" class="seg" aria-label="View"></nav>
+      <div class="lvl" title="Open up any floor">
+        <span class="lvl-label">Level</span>
+        <select id="levelSelect" class="input" aria-label="Level"></select>
+        <button id="lvlDown" class="btn icon sm" title="One floor down">▼</button>
+        <button id="lvlUp" class="btn icon sm" title="One floor up">▲</button>
+      </div>
+      <div id="upperSeg" class="seg small" title="How floors above the chosen level are drawn">
+        <span class="seg-label">Floors above</span>
+        <button class="seg-btn" data-upper="ghost">Transparent</button>
+        <button class="seg-btn" data-upper="hidden">Hidden</button>
+      </div>
+      <button id="saveViewBtn" class="btn" title="Save the current camera position as a named view">★ Save view</button>
+      <button id="shotBtn" class="btn" title="Download a screenshot (PNG) of the current view">⤓ Screenshot</button>
+      <button id="helpBtn" class="btn icon" title="How to use">?</button>
+      <div class="menu-wrap">
+        <button id="menuBtn" class="btn icon" title="Share, back up, about">☰</button>
+        <div id="menu" class="menu" hidden></div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <aside id="sidebar">
+      <div class="tabs">
+        <button class="tab on" data-tab="issues">Issues</button>
+        <button class="tab" data-tab="views">Saved views</button>
+      </div>
+      <div id="issuesTab" class="tab-body">
+        <div id="layers"></div>
+        <input id="search" class="input" type="search" placeholder="Search issues: #, unit, level, words…" aria-label="Search issues">
+        <div class="filters">
+          <select id="statusFilter" class="input" aria-label="Status filter"></select>
+          <select id="periodFilter" class="input" aria-label="Date raised filter"></select>
+          <select id="categoryFilter" class="input" aria-label="Category filter"></select>
+        </div>
+        <div class="row-between list-head">
+          <span id="issueCount" class="muted"></span>
+          <button id="newIssueBtn" class="btn primary sm" title="Record a new issue (uses the red pointer if one is showing)">+ New issue</button>
+        </div>
+        <ul id="issueList" class="cards"></ul>
+      </div>
+      <div id="viewsTab" class="tab-body" hidden>
+        <button id="saveViewBtn2" class="btn primary sm" title="Save the current camera position as a named view">★ Save current view</button>
+        <ul id="bookmarkList" class="cards"></ul>
+      </div>
+    </aside>
+
+    <section id="viewport">
+      <div id="canvasHost"></div>
+      <div id="loading">Building the model…</div>
+      <div id="goto">
+        <input id="gotoInput" class="input" type="search" autocomplete="off" placeholder="Go to… unit, level or place (e.g. 1206, basement south-east, pool)" aria-label="Go to a place">
+        <ul id="gotoList" hidden></ul>
+      </div>
+      <div id="modeHint"></div>
+      <div id="compass">
+        <svg id="compassRose" viewBox="-30 -30 60 60" width="64" height="64" aria-hidden="true">
+          <circle r="27" fill="rgba(255,255,255,0.92)" stroke="#24313d" stroke-width="1.5"/>
+          <path d="M0,-22 L6,0 L-6,0 Z" fill="#c62828"/>
+          <path d="M0,22 L6,0 L-6,0 Z" fill="#7a8692"/>
+          <text x="0" y="-14" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#ffffff">N</text>
+        </svg>
+        <div id="compassText"></div>
+        <div id="viewFrom" title="Look at the building from one side">
+          <span>View from</span>
+          <button data-dir="N">N</button><button data-dir="E">E</button><button data-dir="S">S</button><button data-dir="W">W</button><button data-dir="T" title="From above (plan view)">Top</button>
+        </div>
+      </div>
+      <div id="legend">
+        <button id="legendToggle" class="legend-head">Legend ▾</button>
+        <div id="legendBody"></div>
+        <div id="legendAcc" hidden></div>
+      </div>
+      <div id="disclaimer">UNOFFICIAL PROTOTYPE — SCHEMATIC, NOT TO SCALE — EXAMPLE ISSUES ARE MADE UP</div>
+      <div id="osmCredit">Map data © OpenStreetMap contributors</div>
+      <div id="tooltip" hidden></div>
+      <div id="clickHint">Click anywhere on the building to point at it</div>
+      <div id="placeBanner" hidden>⌖ Click on the model where the issue is. <button class="btn sm" onclick="window.anolaApp.cancelPlacement()">Cancel</button></div>
+      <div id="componentCard" hidden></div>
+      <div id="tourCard" hidden></div>
+    </section>
+
+    <aside id="detail" hidden></aside>
+  </main>
+
+  <div id="modal" hidden></div>
+  <div id="toast"></div>
+  <div id="printSheet"></div>
+
+  <!-- Data files (plain JavaScript wrappers so the app works when opened directly from disk) -->
+  <script>window.ANOLA_EDITION = "public";</script>
+  <script src="data/building-model.js?v=0.3"></script>
+  <script src="data/issues-seed.js?v=0.3"></script>
+  <script src="app/app.js?v=0.3"></script>
+</body>
+</html>
